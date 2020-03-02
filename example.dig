@@ -1,0 +1,9 @@
+_export:
+  plugin:
+    repositories:
+      - file:///Users/t_kadowaki/.m2/repository/
+    dependencies:
+      - dev.nomadblacky:digdag-plugin-example-scala_2.13:0.1.0-SNAPSHOT
+
++run_task:
+  example>:
