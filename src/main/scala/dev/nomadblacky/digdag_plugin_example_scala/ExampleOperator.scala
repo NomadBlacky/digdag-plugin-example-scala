@@ -1,6 +1,5 @@
 package dev.nomadblacky.digdag_plugin_example_scala
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.digdag.spi.{Operator, OperatorContext, OperatorFactory, TaskResult}
 import io.digdag.util.BaseOperator
 import org.slf4j.LoggerFactory
@@ -13,13 +12,22 @@ class ExampleOperator(_context: OperatorContext) extends BaseOperator(_context) 
 
   override def runTask(): TaskResult = {
     val config = this.request.getConfig
-    val pretty = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(config)
-    logger.info(pretty)
 
-    logger.info("key = {}", config.get("key", classOf[String]))
-    logger.info("array = {}", config.getList("array", classOf[Int]).asScala.toSeq)
+    val sum = config
+      .getList("sum", classOf[Int])
+      .asScala
+      .sum
 
-    TaskResult.empty(this.request)
+    val resultParams = {
+      val params = config.getFactory.create()
+      val result = params.getNestedOrSetEmpty("result")
+      result.set("sum", sum)
+      params
+    }
+
+    logger.info("Store the result to `result.sum` variable!")
+
+    TaskResult.defaultBuilder(this.request).storeParams(resultParams).build()
   }
 }
 

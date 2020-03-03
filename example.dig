@@ -4,12 +4,13 @@ _export:
       - file:///Users/t_kadowaki/.m2/repository/
     dependencies:
       - dev.nomadblacky:digdag-plugin-example-scala_2.13:0.1.0-SNAPSHOT
-  exported_parameter: foo
 
 +run_task:
   example>:
-  key: value
-  array:
+  sum:
     - 1
     - 22
     - 333
+
++show_result:
+  echo>: ${result.sum}
